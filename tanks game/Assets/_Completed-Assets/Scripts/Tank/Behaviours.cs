@@ -22,17 +22,17 @@ namespace Complete
             switch (m_Behaviour) {
 
                 case 9:
-                    return SpinBehaviour(-0.05f, 1f);
+                    return SpinBehaviour(-0.05f, 1f);//I'm not using this.       
                 case 8:
-                    return TrackBehaviour();
+                    return TrackBehaviour(); /// I'm not using this. 
                 case 0:
-                    return Fun(0.3f);
+                    return Fun(0.3f); //Uses an argument for speed.
                 case 1:
-                    return MoveTowards(); // enemy tank follows and shoots. *deadly
+                    return MoveTowards(); //Follows player and shoots. 
                 case 2:
-                    return Frightened(); // enemy tank backs off and moves backwards away 
+                    return Frightened(); //Enemy moves backwards, away from the player. 
                 case 3:
-                    return Unpredictable(speed); // randomly moves around so that its hard to kill enemy tank
+                    return Unpredictable(speed); //Randomly moves with a randomly generated speed used as an argument. 
 
 
                 default:
@@ -126,7 +126,9 @@ namespace Complete
                             
                             new Action(() => Move(0.8f))),
                             // Turn left toward target
-                            new Action(() => Turn(0.2f))
+                            new Action(() => Turn(0.2f)),
+
+                            new Action(() => Fire(0.2f))
                     )
                 )
             );
@@ -155,19 +157,19 @@ namespace Complete
                         new BlackboardCondition("targetOnLeft",
                                                 Operator.IS_EQUAL, true,
                                                 Stops.IMMEDIATE_RESTART,
-                            // Turn right toward target
+                            // Turn left away from the target
                             new Action(() => Turn(-0.2f))),
                         new BlackboardCondition("targetOnRight",
                                                 Operator.IS_EQUAL, true,
                                                 Stops.IMMEDIATE_RESTART,
-                            // Turn right toward target
+                            // Turn right - away
                             new Action(() => Turn(0.2f))),
                           new BlackboardCondition("targetDistance",
                                                 Operator.IS_SMALLER_OR_EQUAL, 10.0f,
                                                 Stops.IMMEDIATE_RESTART,
 
                             new Action(() => Move(-0.2f)))
-                            // Turn left toward target
+                           
                            // new Action(() => Turn(0.2f))
                     )
                 )
