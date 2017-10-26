@@ -16,7 +16,7 @@ namespace Complete
 
         private Root CreateBehaviourTree() {
 
-            System.Random rnd = new System.Random();
+            System.Random rnd = new System.Random(); //Didn't know how to use NPBehave's random so I used System's. 
             float speed = rnd.Next(-1, 1);
 
             switch (m_Behaviour) {
@@ -28,9 +28,9 @@ namespace Complete
                 case 0:
                     return Fun(0.3f); //Uses an argument for speed.
                 case 1:
-                    return MoveTowards(); //Follows player and shoots. 
+                    return MoveTowards(); //Shoots in player direction.
                 case 2:
-                    return Frightened(); //Enemy moves backwards, away from the player. 
+                    return Frightened(); //Enemy panics and moves in a circular motion. 
                 case 3:
                     return Unpredictable(speed); //Randomly moves with a randomly generated speed used as an argument. 
 
@@ -108,29 +108,41 @@ namespace Complete
             return new Root(
                 new Service(0.2f, UpdatePerception,
                     new Selector(
+
+
                         new BlackboardCondition("targetOffCentre",
                                                 Operator.IS_SMALLER_OR_EQUAL, 0.1f,
                                                 Stops.IMMEDIATE_RESTART,
                             // Stop turning and fire
                             new Sequence(StopTurning(),
-                                        new Wait(1.0f),
-                                        RandomFire())),
+                                        new Wait(0.5f),
+                                        new Action(() => Fire(1)))),
+
                         new BlackboardCondition("targetOnRight",
                                                 Operator.IS_EQUAL, true,
                                                 Stops.IMMEDIATE_RESTART,
                             // Turn right toward target
-                            new Action(() => Turn(0.2f))),
-                          new BlackboardCondition("targetDistance",
-                                                Operator.IS_SMALLER_OR_EQUAL, 15.0f,
+                            new Action(() => Turn(0.3f))),
+
+                        new BlackboardCondition("targetOnRight",
+                                                Operator.IS_EQUAL, false,
                                                 Stops.IMMEDIATE_RESTART,
                             
-                            new Action(() => Move(0.8f))),
-                            // Turn left toward target
-                            new Action(() => Turn(0.2f)),
+                            new Action(() => Turn(-0.3f))),
 
-                            new Action(() => Fire(0.2f))
+                      new BlackboardCondition("targetDistance",
+                                            Operator.IS_SMALLER_OR_EQUAL, 15.0f,
+                                            Stops.IMMEDIATE_RESTART,
+
+                        new Action(() => Move(0.3f)))
+                     
+                        //new Action(() => Turn(0.2f))
+                        //Constantly fire.
+
                     )
-                )
+                    )
+             
+                
             );
         }
 
@@ -157,7 +169,7 @@ namespace Complete
                         new BlackboardCondition("targetOnLeft",
                                                 Operator.IS_EQUAL, true,
                                                 Stops.IMMEDIATE_RESTART,
-                            // Turn left away from the target
+                            // Turn left
                             new Action(() => Turn(-0.2f))),
                         new BlackboardCondition("targetOnRight",
                                                 Operator.IS_EQUAL, true,
@@ -168,7 +180,7 @@ namespace Complete
                                                 Operator.IS_SMALLER_OR_EQUAL, 10.0f,
                                                 Stops.IMMEDIATE_RESTART,
 
-                            new Action(() => Move(-0.2f)))
+                            new Action(() => Move(-0.2f)))//Move backwards -scared. 
                            
                            // new Action(() => Turn(0.2f))
                     )

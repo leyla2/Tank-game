@@ -1,4 +1,4 @@
 sceneSetups:
-- path: Assets/_Completed-Assets/Scenes/morecode&comments.unity
+- path: Assets/_Completed-Assets/Scenes/FINITO! FINAL scene.unity
   isLoaded: 1
   isActive: 1
